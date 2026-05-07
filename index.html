@@ -3,46 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion Wi-Fi</title>
+    <title>Accès Wi-Fi</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
-        body { font-family: sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        h2 { color: #333; text-align: center; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
-        button:hover { background-color: #0056b3; }
-        .footer { font-size: 12px; color: #777; text-align: center; margin-top: 1rem; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f3; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; }
+        h2 { color: #2c3e50; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        button { width: 100%; padding: 12px; background-color: #27ae60; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
+        button:hover { background-color: #219150; }
+        .info { font-size: 13px; color: #7f8c8d; margin-top: 15px; }
     </style>
 </head>
 <body>
+
     <div class="card">
-        <h2>Accès Wi-Fi Gratuit</h2>
-        <form id="wifiForm">
+        <h2>Wi-Fi Gratuit</h2>
+        
+        <!-- ÉTAPE 1 : FORMULAIRE -->
+        <form id="form-inscription">
             <input type="text" id="prenom" placeholder="Prénom" required>
             <input type="text" id="nom" placeholder="Nom" required>
-            <input type="email" id="email" placeholder="Votre adresse email" required>
-            <button type="submit">Recevoir mon code d'accès</button>
+            <input type="email" id="email" placeholder="Email" required>
+            <button type="submit" id="btn-envoyer">Recevoir mon code</button>
         </form>
-        <div id="validationStep" style="display:none;">
-            <p style="font-size: 14px;">Un code a été envoyé à votre email. Entrez-le ci-dessous :</p>
-            <input type="text" id="code" placeholder="Code à 6 chiffres">
-            <button onclick="connecter()">Se connecter</button>
+
+        <!-- ÉTAPE 2 : VALIDATION -->
+        <div id="section-code" style="display:none;">
+            <p>Code envoyé ! Vérifiez vos emails.</p>
+            <input type="text" id="code-entree" placeholder="Entrez le code reçu">
+            <button onclick="verifierCode()">Se connecter</button>
         </div>
-        <p class="footer">En vous connectant, vous acceptez nos CGU.</p>
+
+        <p class="info">En vous connectant, vous acceptez la collecte de vos données à des fins de service.</p>
     </div>
 
-    <script>
-        const form = document.getElementById('wifiForm');
-        form.onsubmit = function(e) {
+    <script type="text/javascript">
+        // --- CONFIGURATION EMAILJS ---
+        (function() {
+            emailjs.init("c2fKJQhZIUzLmKc11"); // REMPLACE ICI
+        })();
+
+        let codeGenere = "";
+
+        document.getElementById('form-inscription').onsubmit = function(e) {
             e.preventDefault();
-            // Ici, on simule l'envoi du mail via une API
-            alert("Un code de validation a été envoyé !");
-            form.style.display = 'none';
-            document.getElementById('validationStep').style.display = 'block';
+            const btn = document.getElementById('btn-envoyer');
+            btn.innerText = "Envoi en cours...";
+            
+            // Génération d'un code aléatoire à 4 chiffres
+            codeGenere = Math.floor(1000 + Math.random() * 9000).toString();
+
+            const params = {
+                prenom: document.getElementById('prenom').value,
+                nom: document.getElementById('nom').value,
+                email: document.getElementById('email').value,
+                code: codeGenere
+            };
+
+            emailjs.send('VOTRE_SERVICE_ID', 'VOTRE_TEMPLATE_ID', params) // REMPLACE ICI
+                .then(function() {
+                    document.getElementById('form-inscription').style.display = 'none';
+                    document.getElementById('section-code').style.display = 'block';
+                }, function(error) {
+                    alert("Erreur d'envoi : " + JSON.stringify(error));
+                });
         };
-        function connecter() {
-            // Logique de redirection vers le portail Nebula
-            window.location.href = "https://nebula.zyxel.com"; 
+
+        function verifierCode() {
+            const saisie = document.getElementById('code-entree').value;
+            if (saisie === codeGenere) {
+                alert("Connexion réussie !");
+                // ICI : Redirection vers l'URL de succès Nebula
+                window.location.href = "https://google.com"; 
+            } else {
+                alert("Code incorrect.");
+            }
         }
     </script>
 </body>
