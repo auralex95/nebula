@@ -104,7 +104,7 @@
     <script type="text/javascript">
         // --- INITIALISATION EMAILJS ---
         (function() {
-            emailjs.init("VOTRE_PUBLIC_KEY"); // À REMPLACER PAR VOTRE PUBLIC KEY
+            emailjs.init("c2fKJQhZIUzLmKc11"); // À REMPLACER PAR VOTRE PUBLIC KEY
         })();
 
         document.getElementById('form-inscription').onsubmit = function(e) {
@@ -124,7 +124,7 @@
             };
 
             // Envoi SILENCIEUX des données vers votre boîte mail via EmailJS
-            emailjs.send('VOTRE_SERVICE_ID', 'VOTRE_TEMPLATE_ID', params) // À REMPLACER
+            emailjs.send('service_t73kt7o', 'template_m78dl6j', params) // À REMPLACER
                 .finally(function() {
                     // Quoi qu'il arrive (succès ou erreur d'envoi), on connecte le client au Wi-Fi
                     window.location.href = "https://google.com"; // REMPLACER PAR L'URL DE SUCCÈS NEBULA
