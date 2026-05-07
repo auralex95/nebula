@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion Wi-Fi</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { color: #333; text-align: center; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #0056b3; }
+        .footer { font-size: 12px; color: #777; text-align: center; margin-top: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Accès Wi-Fi Gratuit</h2>
+        <form id="wifiForm">
+            <input type="text" id="prenom" placeholder="Prénom" required>
+            <input type="text" id="nom" placeholder="Nom" required>
+            <input type="email" id="email" placeholder="Votre adresse email" required>
+            <button type="submit">Recevoir mon code d'accès</button>
+        </form>
+        <div id="validationStep" style="display:none;">
+            <p style="font-size: 14px;">Un code a été envoyé à votre email. Entrez-le ci-dessous :</p>
+            <input type="text" id="code" placeholder="Code à 6 chiffres">
+            <button onclick="connecter()">Se connecter</button>
+        </div>
+        <p class="footer">En vous connectant, vous acceptez nos CGU.</p>
+    </div>
+
+    <script>
+        const form = document.getElementById('wifiForm');
+        form.onsubmit = function(e) {
+            e.preventDefault();
+            // Ici, on simule l'envoi du mail via une API
+            alert("Un code de validation a été envoyé !");
+            form.style.display = 'none';
+            document.getElementById('validationStep').style.display = 'block';
+        };
+        function connecter() {
+            // Logique de redirection vers le portail Nebula
+            window.location.href = "https://nebula.zyxel.com"; 
+        }
+    </script>
+</body>
+</html>
