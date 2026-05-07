@@ -3,83 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accès Wi-Fi</title>
+    <title>Wi-Fi - Vendôme Club Paris</title>
+    <!-- Script EmailJS -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f3; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; }
-        h2 { color: #2c3e50; margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
-        button { width: 100%; padding: 12px; background-color: #27ae60; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
-        button:hover { background-color: #219150; }
-        .info { font-size: 13px; color: #7f8c8d; margin-top: 15px; }
+        /* Design élégant Noir et Or */
+        body { 
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+            background-color: #0a0a0a; 
+            background-image: radial-gradient(circle, #1a1a1a 0%, #000000 100%);
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            color: #ffffff;
+        }
+        .card { 
+            background: rgba(20, 20, 20, 0.9); 
+            padding: 40px 30px; 
+            border-radius: 10px; 
+            border: 1px solid #d4af37; /* Liseré Or */
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15); 
+            width: 100%; 
+            max-width: 320px; 
+            text-align: center; 
+        }
+        h1 { 
+            color: #d4af37; /* Or */
+            margin-bottom: 5px; 
+            font-weight: 300;
+            letter-spacing: 2px;
+            font-size: 22px;
+            text-transform: uppercase;
+        }
+        p.subtitle {
+            color: #a0a0a0;
+            font-size: 13px;
+            margin-bottom: 30px;
+        }
+        input { 
+            width: 100%; 
+            padding: 14px; 
+            margin: 10px 0; 
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border: 1px solid #333; 
+            border-radius: 4px; 
+            box-sizing: border-box; 
+            font-size: 14px; 
+        }
+        input:focus {
+            outline: none;
+            border-color: #d4af37;
+        }
+        input::placeholder {
+            color: #666;
+        }
+        button { 
+            width: 100%; 
+            padding: 14px; 
+            margin-top: 15px;
+            background-color: #d4af37; 
+            color: #000000; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 15px; 
+            font-weight: bold; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s; 
+        }
+        button:hover { 
+            background-color: #bfa030; 
+        }
+        .info { 
+            font-size: 11px; 
+            color: #555; 
+            margin-top: 25px; 
+        }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <h2>Wi-Fi Gratuit</h2>
+        <h1>Vendôme Club</h1>
+        <p class="subtitle">Accès Wi-Fi Réservé</p>
         
-        <!-- ÉTAPE 1 : FORMULAIRE -->
         <form id="form-inscription">
             <input type="text" id="prenom" placeholder="Prénom" required>
             <input type="text" id="nom" placeholder="Nom" required>
-            <input type="email" id="email" placeholder="Email" required>
-            <button type="submit" id="btn-envoyer">Recevoir mon code</button>
+            <input type="email" id="email" placeholder="Adresse e-mail" required>
+            <button type="submit" id="btn-connect">Se connecter</button>
         </form>
 
-        <!-- ÉTAPE 2 : VALIDATION -->
-        <div id="section-code" style="display:none;">
-            <p>Code envoyé ! Vérifiez vos emails.</p>
-            <input type="text" id="code-entree" placeholder="Entrez le code reçu">
-            <button onclick="verifierCode()">Se connecter</button>
-        </div>
-
-        <p class="info">En vous connectant, vous acceptez la collecte de vos données à des fins de service.</p>
+        <p class="info">En vous connectant, vous acceptez les conditions générales d'utilisation de notre réseau.</p>
     </div>
 
     <script type="text/javascript">
-        // --- CONFIGURATION EMAILJS ---
+        // --- INITIALISATION EMAILJS ---
         (function() {
-            emailjs.init("c2fKJQhZIUzLmKc11"); // REMPLACE ICI
+            emailjs.init("VOTRE_PUBLIC_KEY"); // À REMPLACER PAR VOTRE PUBLIC KEY
         })();
-
-        let codeGenere = "";
 
         document.getElementById('form-inscription').onsubmit = function(e) {
             e.preventDefault();
-            const btn = document.getElementById('btn-envoyer');
-            btn.innerText = "Envoi en cours...";
             
-            // Génération d'un code aléatoire à 4 chiffres
-            codeGenere = Math.floor(1000 + Math.random() * 9000).toString();
+            // Changement d'état du bouton pour faire patienter le client (1 ou 2 secondes)
+            const btn = document.getElementById('btn-connect');
+            btn.innerText = "Connexion en cours...";
+            btn.style.backgroundColor = "#8c7324";
+            btn.disabled = true;
 
+            // Récupération des données du client
             const params = {
                 prenom: document.getElementById('prenom').value,
                 nom: document.getElementById('nom').value,
-                email: document.getElementById('email').value,
-                code: codeGenere
+                email: document.getElementById('email').value
             };
 
-            emailjs.send('service_t73kt7o', 'template_m78dl6j', params) // REMPLACE ICI
-                .then(function() {
-                    document.getElementById('form-inscription').style.display = 'none';
-                    document.getElementById('section-code').style.display = 'block';
-                }, function(error) {
-                    alert("Erreur d'envoi : " + JSON.stringify(error));
+            // Envoi SILENCIEUX des données vers votre boîte mail via EmailJS
+            emailjs.send('VOTRE_SERVICE_ID', 'VOTRE_TEMPLATE_ID', params) // À REMPLACER
+                .finally(function() {
+                    // Quoi qu'il arrive (succès ou erreur d'envoi), on connecte le client au Wi-Fi
+                    window.location.href = "https://google.com"; // REMPLACER PAR L'URL DE SUCCÈS NEBULA
                 });
         };
-
-        function verifierCode() {
-            const saisie = document.getElementById('code-entree').value;
-            if (saisie === codeGenere) {
-                alert("Connexion réussie !");
-                // ICI : Redirection vers l'URL de succès Nebula
-                window.location.href = "https://google.com"; 
-            } else {
-                alert("Code incorrect.");
-            }
-        }
     </script>
 </body>
 </html>
