@@ -101,7 +101,7 @@
         <p class="info">En vous connectant, vous acceptez les conditions générales d'utilisation de notre réseau.</p>
     </div>
 
-    <script type="text/javascript">
+<script type="text/javascript">
         // --- INITIALISATION EMAILJS ---
         (function() {
             emailjs.init("c2fKJQhZIUzLmKc11"); // À REMPLACER PAR VOTRE PUBLIC KEY
@@ -110,24 +110,33 @@
         document.getElementById('form-inscription').onsubmit = function(e) {
             e.preventDefault();
             
-            // Changement d'état du bouton pour faire patienter le client (1 ou 2 secondes)
+            // On fait patienter le client visuellement
             const btn = document.getElementById('btn-connect');
-            btn.innerText = "Connexion en cours...";
+            btn.innerText = "Connexion au réseau...";
             btn.style.backgroundColor = "#8c7324";
             btn.disabled = true;
 
-            // Récupération des données du client
             const params = {
                 prenom: document.getElementById('prenom').value,
                 nom: document.getElementById('nom').value,
                 email: document.getElementById('email').value
             };
 
-            // Envoi SILENCIEUX des données vers votre boîte mail via EmailJS
-            emailjs.send('service_t73kt7o', 'template_m78dl6j', params) // À REMPLACER
+            // 1. Envoi silencieux des données vers votre boîte mail
+            emailjs.send('service_t73kt7o', 'template_m78dl6j', params)
                 .finally(function() {
-                    // Quoi qu'il arrive (succès ou erreur d'envoi), on connecte le client au Wi-Fi
-                    window.location.href = "https://google.com"; // REMPLACER PAR L'URL DE SUCCÈS NEBULA
+                    
+                    // 2. MAGIE NEBULA : On récupère l'adresse de déblocage de la borne
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const zyxelUnlockUrl = urlParams.get('apurl');
+
+                    if (zyxelUnlockUrl) {
+                        // On renvoie le client vers la borne pour ouvrir l'accès Wi-Fi
+                        window.location.href = zyxelUnlockUrl;
+                    } else {
+                        // Au cas où le lien n'est pas trouvé (ex: si vous testez depuis chez vous sans être sur le Wi-Fi du club)
+                        alert("Accès validé. Bienvenue au Vendôme Club !");
+                    }
                 });
         };
     </script>
